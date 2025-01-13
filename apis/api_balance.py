@@ -16,7 +16,7 @@ def get_balance(user_id: str):
 # 更新
 def update_balance(user_id: str, new_balance: Balance):
     url = BASE_URL + "/balance/" + user_id
-    response = requests.put(url, json=new_balance.dict())
+    response = requests.put(url, json=new_balance.model_dump())
     if response.status_code == 200:
         return response.json()
     else:

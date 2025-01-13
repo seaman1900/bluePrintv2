@@ -1,4 +1,5 @@
 import streamlit as st
+from datetime import datetime
 
 from models.print import Print
 from models.user import User
@@ -36,7 +37,10 @@ def buy_dialog(price, print_info: Print):
         if st.button("确定", key=user.user_id+"_buy_confirm"):
             result = check_purchase(user.user_id, print_info.print_id)
             if result == "yes":
-                st.error("已经购买过")
+                # 跳转到详情页
+                cur_state.view_type = "detail"
+                cur_state.print_info = print_info
+                st.rerun()
             else:
                 if balance >= price:
                     # 创建transaction
@@ -45,12 +49,14 @@ def buy_dialog(price, print_info: Print):
                     new_buyer_balance = Balance(
                         user_id=user.user_id,
                         balance= - price,
-                        frozen_amount=0
+                        frozen_amount=0,
+                        last_update_time=None
                     )
                     new_seller_balance = Balance(
                         user_id=print_info.author_id,
                         balance= price,
-                        frozen_amount=0
+                        frozen_amount=0,
+                        last_update_time=None
                     )
                     # 买家减少余额, 卖家增加余额
                     updated_buyer_balance = update_balance(user.user_id, new_buyer_balance)

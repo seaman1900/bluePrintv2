@@ -10,7 +10,7 @@ from models.print import Print
 
 # modules
 from modules.print_card import print_card
-
+from modules.print_detail import print_detail
 # 设置页面wide显示
 st.session_state.page = "blue_print"
 if st.session_state.get("page") == "blue_print":
@@ -27,3 +27,6 @@ if cur_states.view_type == 'preview':
       for print in prints:
         print = Print(**print)
         print_card(print)
+else:
+   print_info = cur_states.print_info
+   print_detail(print_info)
